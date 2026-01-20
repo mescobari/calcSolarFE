@@ -8,13 +8,7 @@ import { TextField, Button, MenuItem, InputAdornment, Tooltip } from '@mui/mater
 import panelsData from './panels.json';
 import invertersData from './inverters.json';
 
-const arrayTypes = [
-  { id: 0, name: 'Fixed - Open Rack' },
-  { id: 1, name: 'Fixed - Roof Mounted' },
-  { id: 2, name: '1-Axis' },
-  { id: 3, name: '1-Axis Backtracking' },
-  { id: 4, name: '2-Axis' },
-];
+
 
 type Panel = typeof panelsData[number];
 type Inverter = typeof invertersData[number];
@@ -45,10 +39,6 @@ const SystemTab: React.FC<SystemTabProps> = ({ onChange, defaultValues }) => {
       panel_qty: 1,
       system_capacity: panels[0].power / 1000,
       inverter_id: inverters[0].id,
-      array_type: 0,
-      tilt: 20,
-      azimuth: 180,
-      losses: 14,
       inverter_qty: 1,
     },
   });
@@ -110,7 +100,7 @@ const SystemTab: React.FC<SystemTabProps> = ({ onChange, defaultValues }) => {
             )}
           />
         </Grid>
-        <Grid item columns={{ xs: 12, sm: 6 }}>
+
           <TextField
             label="Potencia por panel (W)"
             value={panelPower}
@@ -167,77 +157,7 @@ const SystemTab: React.FC<SystemTabProps> = ({ onChange, defaultValues }) => {
           />
         </Grid>
         <Grid item columns={{ xs: 12, sm: 6 }}>
-          <Controller
-            name="array_type"
-            control={control}
-            render={({ field }) => (
-              <TextField {...field} select label="Tipo de arreglo" fullWidth>
-                {arrayTypes.map((type) => (
-                  <MenuItem key={type.id} value={type.id}>
-                    {type.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-        </Grid>
-        <Grid item columns={{ xs: 12, sm: 6 }}>
-          <Controller
-            name="tilt"
-            control={control}
-            render={({ field }) => (
-              <Tooltip title="Inclinación (0-90)">
-                <TextField
-                  {...field}
-                  label="Inclinación (°)"
-                  type="number"
-                  fullWidth
-                  inputProps={{ min: 0, max: 90 }}
-                  error={!!errors.tilt}
-                  helperText={errors.tilt?.message}
-                />
-              </Tooltip>
-            )}
-          />
-        </Grid>
-        <Grid item columns={{ xs: 12, sm: 6 }}>
-          <Controller
-            name="azimuth"
-            control={control}
-            render={({ field }) => (
-              <Tooltip title="Azimut (0-359)">
-                <TextField
-                  {...field}
-                  label="Azimut (°)"
-                  type="number"
-                  fullWidth
-                  inputProps={{ min: 0, max: 359 }}
-                  error={!!errors.azimuth}
-                  helperText={errors.azimuth?.message}
-                />
-              </Tooltip>
-            )}
-          />
-        </Grid>
-        <Grid item columns={{ xs: 12, sm: 6 }}>
-          <Controller
-            name="losses"
-            control={control}
-            render={({ field }) => (
-              <Tooltip title="Pérdidas (-5 a 99)">
-                <TextField
-                  {...field}
-                  label="Pérdidas (%)"
-                  type="number"
-                  fullWidth
-                  inputProps={{ min: -5, max: 99 }}
-                  error={!!errors.losses}
-                  helperText={errors.losses?.message}
-                />
-              </Tooltip>
-            )}
-          />
-        </Grid>
+
         <Grid item columns={{ xs: 12 }}>
           <Button type="submit" variant="contained" color="primary">
             Validar sistema

@@ -8,9 +8,10 @@ import { TextField, Button, Alert, Tooltip } from '@mui/material';
 
 interface LocationTabProps {
   onChange?: (data: any) => void;
+  defaultValues?: any;
 }
 
-const LocationTab: React.FC<LocationTabProps> = ({ onChange }) => {
+const LocationTab: React.FC<LocationTabProps> = ({ onChange, defaultValues }) => {
   const {
     control,
     handleSubmit,
@@ -18,7 +19,7 @@ const LocationTab: React.FC<LocationTabProps> = ({ onChange }) => {
     watch,
   } = useForm<z.infer<typeof locationSchema>>({
     resolver: zodResolver(locationSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       address: '',
       lat: undefined,
       lon: undefined,

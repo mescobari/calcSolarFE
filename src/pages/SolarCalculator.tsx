@@ -56,9 +56,24 @@ const SolarCalculator: React.FC = () => {
         ))}
       </Tabs>
       <Box sx={{ mt: 2 }}>
-        {tab === 0 && <LocationTab onChange={handleLocation} />}
-        {tab === 1 && <SystemTab onChange={handleSystem} />}
-        {tab === 2 && <ParametersTab onChange={handleParameters} />}
+        {tab === 0 && (
+          <LocationTab
+            onChange={handleLocation}
+            defaultValues={locationData || undefined}
+          />
+        )}
+        {tab === 1 && (
+          <SystemTab
+            onChange={handleSystem}
+            defaultValues={systemData || undefined}
+          />
+        )}
+        {tab === 2 && (
+          <ParametersTab
+            onChange={handleParameters}
+            defaultValues={parametersData || undefined}
+          />
+        )}
         {tab === 3 && <ResultsTab result={result} loading={loading} error={error} />}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>

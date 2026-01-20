@@ -23,9 +23,10 @@ type SystemForm = z.infer<typeof systemSchema>;
 
 interface SystemTabProps {
   onChange?: (data: any) => void;
+  defaultValues?: any;
 }
 
-const SystemTab: React.FC<SystemTabProps> = ({ onChange }) => {
+const SystemTab: React.FC<SystemTabProps> = ({ onChange, defaultValues }) => {
   const [panels] = useState<Panel[]>(panelsData as any);
   const [inverters] = useState<Inverter[]>(invertersData as any);
   const [panelPower, setPanelPower] = useState<number>(panels[0].power);
@@ -38,7 +39,7 @@ const SystemTab: React.FC<SystemTabProps> = ({ onChange }) => {
     formState: { errors },
   } = useForm<SystemForm>({
     resolver: zodResolver(systemSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       panel_id: panels[0].id,
       panel_power: panels[0].power,
       panel_qty: 1,

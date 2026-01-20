@@ -43,10 +43,23 @@ const defaultValues: ParametersForm = {
 
 interface ParametersTabProps {
   onChange?: (data: any) => void;
+  defaultValues?: any;
 }
 
-const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
+const ParametersTab: React.FC<ParametersTabProps> = ({ onChange, defaultValues }) => {
   const [showOptional, setShowOptional] = useState(false);
+  // Merge default values to ensure all required fields are set
+  const mergedDefaults = {
+    format: 'json',
+    module_type: 0,
+    array_type: 1,
+    tilt: 20,
+    azimuth: 180,
+    losses: 14,
+    dc_ac_ratio: 1.2,
+    gcr: 0.4,
+    ...defaultValues,
+  };
   const {
     control,
     handleSubmit,
@@ -54,7 +67,7 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
     watch,
   } = useForm<ParametersForm>({
     resolver: zodResolver(parametersSchema),
-    defaultValues,
+    defaultValues: mergedDefaults,
   });
 
   const onSubmit = (data: ParametersForm) => {
@@ -71,12 +84,18 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Grid container spacing={2}>
-        <Grid item columns={{ xs: 12, sm: 6 }}>
+        <Grid item xs={12} md={6}>
           <Controller
             name="format"
             control={control}
             render={({ field }) => (
-              <TextField {...field} select label="Formato" fullWidth>
+              <TextField
+                {...field}
+                select
+                label="Formato"
+                fullWidth
+                value={field.value ?? 'json'}
+              >
                 <MenuItem value="json">JSON</MenuItem>
                 <MenuItem value="xml">XML</MenuItem>
               </TextField>
@@ -87,8 +106,15 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
           <Controller
             name="module_type"
             control={control}
+            rules={{ valueAsNumber: true }}
             render={({ field }) => (
-              <TextField {...field} select label="Tipo de módulo" fullWidth>
+              <TextField
+                {...field}
+                select
+                label="Tipo de módulo"
+                fullWidth
+                value={field.value ?? 0}
+              >
                 {moduleTypes.map((type) => (
                   <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
                 ))}
@@ -100,8 +126,15 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
           <Controller
             name="array_type"
             control={control}
+            rules={{ valueAsNumber: true }}
             render={({ field }) => (
-              <TextField {...field} select label="Tipo de arreglo" fullWidth>
+              <TextField
+                {...field}
+                select
+                label="Tipo de arreglo"
+                fullWidth
+                value={field.value ?? 1}
+              >
                 {arrayTypes.map((type) => (
                   <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
                 ))}
@@ -123,6 +156,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                   inputProps={{ min: 0, max: 90 }}
                   error={!!errors.tilt}
                   helperText={errors.tilt?.message}
+                  value={field.value ?? ''}
+                  onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                 />
               </Tooltip>
             )}
@@ -142,6 +177,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                   inputProps={{ min: 0, max: 359 }}
                   error={!!errors.azimuth}
                   helperText={errors.azimuth?.message}
+                  value={field.value ?? ''}
+                  onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                 />
               </Tooltip>
             )}
@@ -161,6 +198,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                   inputProps={{ min: -5, max: 99 }}
                   error={!!errors.losses}
                   helperText={errors.losses?.message}
+                  value={field.value ?? ''}
+                  onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                 />
               </Tooltip>
             )}
@@ -195,6 +234,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0, max: 100 }}
                     error={!!errors.radius}
                     helperText={errors.radius?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />
@@ -204,7 +245,13 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                 name="timeframe"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} select label="Timeframe" fullWidth>
+                  <TextField
+                    {...field}
+                    select
+                    label="Timeframe"
+                    fullWidth
+                    value={field.value ?? ''}
+                  >
                     <MenuItem value="hourly">Hourly</MenuItem>
                     <MenuItem value="monthly">Monthly</MenuItem>
                   </TextField>
@@ -224,6 +271,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0.3, max: 2.0, step: 0.01 }}
                     error={!!errors.dc_ac_ratio}
                     helperText={errors.dc_ac_ratio?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />
@@ -241,6 +290,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0.01, max: 0.99, step: 0.01 }}
                     error={!!errors.gcr}
                     helperText={errors.gcr?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />
@@ -258,6 +309,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0, max: 1, step: 0.01 }}
                     error={!!errors.bifaciality}
                     helperText={errors.bifaciality?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />
@@ -275,6 +328,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0, max: 1, step: 0.01 }}
                     error={!!errors.albedo}
                     helperText={errors.albedo?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />
@@ -304,6 +359,8 @@ const ParametersTab: React.FC<ParametersTabProps> = ({ onChange }) => {
                     inputProps={{ min: 0, max: 100, step: 0.1 }}
                     error={!!errors.soiling}
                     helperText={errors.soiling?.message}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 )}
               />

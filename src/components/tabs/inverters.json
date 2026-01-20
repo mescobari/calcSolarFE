@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "IQ8M-72-2-US [240V]", "dc_ac": 1.2 },
+  { "id": 2, "name": "SE5000H", "dc_ac": 1.2 },
+  { "id": 3, "name": "USE11400H-USMNBE78", "dc_ac": 1.2 },
+  { "id": 5, "name": "Powerwall 3 Inverter", "dc_ac": 1.2 }
+]

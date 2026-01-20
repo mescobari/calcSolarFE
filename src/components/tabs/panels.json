@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Canadian Solar 455W", "power": 455 },
+  { "id": 2, "name": "Domestic - QCELL Q.TRON BLK M-G2.H+", "power": 430 },
+  { "id": 3, "name": "SBA 200W", "power": 200 },
+  { "id": 4, "name": "Premium 410W", "power": 410 },
+  { "id": 5, "name": "QCELLS 400W", "power": 400 }
+]

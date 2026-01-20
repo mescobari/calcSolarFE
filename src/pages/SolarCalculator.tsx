@@ -32,12 +32,36 @@ const SolarCalculator: React.FC = () => {
     setLoading(true);
     setResult(null);
     try {
-      // Construir payload según backend
-      const payload = {
-        ...locationData,
-        ...systemData,
-        ...parametersData,
-      };
+      // Construir payload solo con los campos válidos
+      const validKeys = [
+        'format',
+        'system_capacity',
+        'module_type',
+        'losses',
+        'array_type',
+        'tilt',
+        'azimuth',
+        'lat',
+        'lon',
+        'file_id',
+        'dataset',
+        'radius',
+        'timeframe',
+        'dc_ac_ratio',
+        'gcr',
+        'inv_eff',
+        'bifaciality',
+        'albedo',
+        'use_wf_albedo',
+        'soiling',
+        'callback',
+      ];
+      const merged = { ...locationData, ...systemData, ...parametersData };
+      // Filtrar solo campos válidos y omitir undefined/vacíos
+      const payload = Object.fromEntries(
+        Object.entries(merged)
+          .filter(([key, value]) => validKeys.includes(key) && value !== undefined && value !== '')
+      );
       const response = await solarService.calculate(payload);
       setResult(response);
       setTab(3); // Ir a resultados
